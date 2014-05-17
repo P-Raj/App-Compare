@@ -20,6 +20,7 @@ class Handler:
         dataDir = os.path.join(self.homeDir, self.name)
         if not os.path.exists(dataDir):
             os.makedirs(dataDir)
+        os.chdir(dataDir)
 
     def getTitle(self):
         return "".join(char
@@ -117,14 +118,14 @@ class Item(Handler):
 
 
     def write(self):
-        with open(self.name + ".property", 'w') as fp:
+        with open(self.getFilePath() + ".property", 'w') as fp:
             for meta in self.metaData:
                 fp.write(meta.encode('ascii',
                                      'ignore') + "\n")
             for key in self.contents:
                 fp.write(key + ":" + "\n")
-                fp.write("\t" + "content" + ":" + self.contents[key]['content'].encode('ascii', 'ignore') + "\n")
-                fp.write("\t" + "text" + ":" + self.contents[key]['text'].encode('ascii', 'ignore') + "\n")
+                fp.write("\t" + "content" + ":" + self.contents[key].get('content',"None").encode('ascii', 'ignore') + "\n")
+                fp.write("\t" + "text" + ":" + self.contents[key].get('text',"None").encode('ascii', 'ignore') + "\n")
 
 
 items = Items("http://windowsphoneapplist.com/en/windowsphone.booksandreference/downloadRank/",
