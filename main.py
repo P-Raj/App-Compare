@@ -94,6 +94,7 @@ class Item(Handler):
 
     def extractContents(self):
         self.contents = {}
+
         def gettext(obj, key='content'):
             objL = {}
             try:
@@ -105,17 +106,39 @@ class Item(Handler):
             except:
                 pass
             return objL
-        rating = self.parser.find('p', {'class': 'flviewinfos'})
-        self.contents['rating'] = {'content': rating.find('span').text, 'text':rating.find('span').text}
-        self.contents['published'] = gettext(self.parser.find('p', {'class': 'flviewinfos'}))
-        self.contents['publisher'] = gettext(self.parser.find('p', {'class': 'flviewinfos'}).find('a'),
-                            'href')
-        self.contents['version'] = gettext(self.parser.find('p', {'class': 'flviewinfos'}))
-        self.contents['size'] = gettext(self.parser.find('p', {'class': 'flviewinfos'}))
-        self.contents['operating system'] = gettext(self.parser.find('p', {'class': 'flviewinfos'}))
-        
-        print self.contents
 
+        rating = self.parser.find('p',
+                                  {
+                                  'class': 'flviewinfos'
+                                  })
+        self.contents['rating'] =
+        {
+            'content': rating.find('span').text,
+            'text': rating.find('span').text
+        }
+        self.contents['published'] = gettext(self.parser.find('p',
+                                             {
+                                             'class': 'flviewinfos'
+                                             }))
+        self.contents['publisher'] = gettext(self.parser.find('p',
+                                             {
+                                             'class': 'flviewinfos'
+                                             }).find('a'),
+                                             'href')
+        self.contents['version'] = gettext(self.parser.find('p',
+                                           {
+                                           'class': 'flviewinfos'
+                                           }))
+        self.contents['size'] = gettext(self.parser.find('p',
+                                        {
+                                        'class': 'flviewinfos'
+                                        }))
+        self.contents['operating system'] = gettext(self.parser.find('p',
+                                                    {
+                                                    'class': 'flviewinfos'
+                                                    }))
+
+        print self.contents
 
     def write(self):
         with open(self.getFilePath() + ".property", 'w') as fp:
@@ -124,10 +147,17 @@ class Item(Handler):
                                      'ignore') + "\n")
             for key in self.contents:
                 fp.write(key + ":" + "\n")
-                fp.write("\t" + "content" + ":" + self.contents[key].get('content',"None").encode('ascii', 'ignore') + "\n")
-                fp.write("\t" + "text" + ":" + self.contents[key].get('text',"None").encode('ascii', 'ignore') + "\n")
+                fp.write("\t" + "content" + ":" +
+                         self.contents[key].get('content',
+                                                "None").encode('ascii',
+                                                               'ignore')
+                         + "\n")
+                fp.write("\t" + "text" + ":" +
+                         self.contents[key].get('text',
+                                                "None").encode('ascii',
+                                                               'ignore')
+                         + "\n")
 
-
-items = Items("http://windowsphoneapplist.com/en/windowsphone.booksandreference/downloadRank/",
-              "books")
+url = "http://windowsphoneapplist.com/en/\windowsphone.booksandreference/downloadRank/"
+items = Items(url, "books")
 items.downloadContents()
