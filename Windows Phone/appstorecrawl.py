@@ -1,4 +1,8 @@
+__author__ = "Pranav Raj"
+__email__ = "pranav09032@hotmail.com"
+
 import os
+import re
 import urllib
 from bs4 import BeautifulSoup
 
@@ -22,10 +26,15 @@ class Handler:
             os.makedirs(dataDir)
         os.chdir(dataDir)
 
+    def cleanString(self, string):
+        string = string.encode('ascii','ignore')
+        string = string.strip()
+        string = re.sub(' +', ' ', string)
+        return string
+
     def getTitle(self):
         return "".join(char
-                       for char in self.parser.title.string.encode('ascii',
-                                                                   'ignore')
+                       for char in self.cleanString(self.parser.title.string)
                        if char.isalnum() or char == " ")
 
     def getFilePath(self):
@@ -66,7 +75,7 @@ class Items(Handler, object):
     def parseMetaData(self, header):
         metaData = header.find_all('dl')
         imageLink = metaData[0].find('img')['src'].strip()
-        metaData = [imageLink] + [meta.text.encode('ascii', 'ignore')
+        metaData = [imageLink] + [self.cleanString(meta)
                                   for meta in metaData[1:]]
         return metaData
 
@@ -83,12 +92,9 @@ class Item(Handler):
     def __init__(self, url, metaData):
 
         self.url = url
-        self.homeDir = os.path.dirname(__file__)
-        self.parser = self.getParser()
-        self.name = self.getTitle()
-        self.contents = {}
         self.metaData = metaData
-        self.setupFolder()
+        super(Item, self).__init__(url)
+        self.contents = {}
         self.extractContents()
         self.write()
 
@@ -143,19 +149,16 @@ class Item(Handler):
     def write(self):
         with open(self.getFilePath() + ".property", 'w') as fp:
             for meta in self.metaData:
-                fp.write(meta.encode('ascii',
-                                     'ignore') + "\n")
+                fp.write(self.cleanString(meta) + "\n")
             for key in self.contents:
                 fp.write(key + ":" + "\n")
                 fp.write("\t" + "content" + ":" +
-                         self.contents[key].get('content',
-                                                "None").encode('ascii',
-                                                               'ignore')
+                         self.cleanString(
+                            self.contents[key].get('content', "None")
                          + "\n")
                 fp.write("\t" + "text" + ":" +
-                         self.contents[key].get('text',
-                                                "None").encode('ascii',
-                                                               'ignore')
+                         self.cleanString(
+                            self.contents[key].get('text', "None")
                          + "\n")
 
 url = "http://windowsphoneapplist.com/en/\windowsphone.booksandreference/downloadRank/"
