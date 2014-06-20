@@ -17,9 +17,9 @@ Links = ['https://play.google.com/store/apps/collection/topselling_paid_game',
 Types = ['free', 'paid']
 
 CategoriesType = map(None,
-					Categories*2,
-					[Types[0]]*len(Categories)
-					+[Types[1]]*len(Categories))
+					Categories * 2,
+					[Types[0]] * len(Categories)
+					+ [Types[1]] * len(Categories))
 
 categoryURL = "https://play.google.com/store/apps/category/"
 categoryURLtype = "/collection/topselling_"
