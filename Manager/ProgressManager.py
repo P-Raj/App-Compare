@@ -5,7 +5,7 @@ import pickle
 import LogManager
 
 logFile = "ProgressManager.log"
-logManager = LogManager.Logging(logFile)
+logManager = LogManager.Handler(logFile)
 
 def getState(filename=None, *params):
 

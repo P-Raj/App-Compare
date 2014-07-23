@@ -32,6 +32,10 @@ class Handler:
         return "".join(char
                        for char in self.cleanString(self.parser.title.string)
                        if char.isalnum() or char == " ")
+        
+    def getIterator(self, headInfo, iteratorInfo):
+        iterator = self.parser.find(*headInfo).findAll(*iteratorInfo)
+        return iterator
 
     def getFilePath(self):
         return os.path.join(self.homeDir, self.name)

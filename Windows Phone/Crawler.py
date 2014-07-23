@@ -12,7 +12,6 @@ Handler = FileManager.Handler
 class Items(Handler, object):
 
     def __init__(self, url, category):
-
         super(Items, self).__init__(url)
         self.category = category
         self.updateName(category)
@@ -20,7 +19,8 @@ class Items(Handler, object):
 
     def extractContents(self):
         self.parser = self.getParser()
-        contents = self.parser.find("ul", {"class": "galerie"}).find_all('li')
+        contents = self.getIterator(("ul", {"class": "galerie"}),
+                                    ('li',{}))
         return contents
 
     def parseMetaData(self, header):

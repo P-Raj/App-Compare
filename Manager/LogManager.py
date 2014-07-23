@@ -5,7 +5,7 @@ import sys
 from datetime import datetime
 
 
-class Logging:
+class Handler:
 
     def __init__(self, logFilename = None):
         if logFilename:
